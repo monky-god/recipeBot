@@ -4,6 +4,7 @@ import random
 import psycopg2
 import google.generativeai as genai
 from datetime import datetime
+from urllib.parse import urlparse
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -11,20 +12,23 @@ load_dotenv()
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command
 
-#токены
+# токены
 TOKEN = os.getenv("BOT_TOKEN")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-# Настройка базы данных
-DB_CONFIG = {
-    "dbname": os.getenv("DB_NAME"),
-    "user": os.getenv("DB_USER"),
-    "password": os.getenv("DB_PASSWORD"),
-    "host": os.getenv("DB_HOST"),
-    "port": os.getenv("DB_PORT")
-}
-MODEL = "models/gemini-2.5-flash"
+# подключение к Railway PostgreSQL
+DATABASE_URL = os.getenv("DATABASE_URL")
+result = urlparse(DATABASE_URL)
 
+DB_CONFIG = {
+    "dbname": result.path[1:],  # убираем /
+    "user": result.username,
+    "password": result.password,
+    "host": result.hostname,
+    "port": result.port
+}
+
+MODEL = "models/gemini-2.5-flash"
 SYSTEM_INSTRUCTION = (
     "Ты — дружелюбный кулинарный ассистент 🤖.\n"
     "Отвечай просто и понятно.\n"
