@@ -1,0 +1,5 @@
+aiogram==3.13.1
+psycopg2-binary
+google-generativeai
+python-dotenv
+asyncio
