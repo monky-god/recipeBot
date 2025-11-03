@@ -289,6 +289,7 @@ async def process_message(message: types.Message):
     conn.commit()
     cur.close()
     conn.close()
+    update_user_activity(user_id)
 
     await message.answer(f"🤖 Ответ от повара Gemini:\n\n{answer}")
 
